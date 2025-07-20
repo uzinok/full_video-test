@@ -8,6 +8,8 @@
 	<style>
 		@charset "UTF-8";
 
+		video::-webkit-media-controls { display: none; }
+
 		:root {
 			--bg-custom: #f8f8f8;
 			--color: #0000ee;
@@ -485,15 +487,6 @@
 		const buttonSettings = customVideo.querySelector('.custom-video__settings');
 
 		video.controls = false;
-
-		if (!document.fullscreenEnabled &&
-			!document.webkitFullscreenEnabled &&
-			!document.mozFullScreenEnabled &&
-			!document.msFullscreenEnabled) {
-			console.error('Fullscreen API не поддерживается в этом браузере.');
-			customVideo.innerText = 'Fullscreen API не поддерживается в этом браузере.';
-			return;
-		}
 
 		if (video.muted) {
 			buttonSound.classList.add('custom-video__sound-button--muted');
