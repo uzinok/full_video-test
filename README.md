@@ -12,7 +12,7 @@
 3.	`gulp optiImg` - оптимизация графики ('src/img/')
 4.	`gulp createRastr` - конвертирует графику в webp и делает ритину
 5.	`gulp fonts` конвертация шрифтов из формата .ttf в форматы .woff и .woff2. (исходные файлы для конвертации в папке 'src/resource/img/', .ttf не попадает в сборку)
-6.	`gulp sprite` - создание .svg-спрайта (исходные .svg для спрайта папке 'src/resource/svg/').
+6.	`gulp sprite` - создание .svg-спрайта (исходные .svg для спрайта папке 'src/resource/svg/'). Подключить спрайт можно так: `{% include 'img/sprite.svg' %}`
 
 ## Файлы и папки
 1.	`dest/` - готовая сборка (находится в списке .gitignore)
