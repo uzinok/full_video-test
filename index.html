@@ -1,0 +1,669 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Document</title><style>@charset "UTF-8";
+
+		video::-webkit-media-controls { display: none; }
+
+		:root {
+			--bg-custom: #f8f8f8;
+			--color: #0000ee;
+			--color-hover: #02276b;
+			--color-1: #ff0000;
+			--color-hover-1: #d40000;
+			--color-range: #7777f3;
+			--bg-range: #c6c6f6
+		}
+
+		.visually-hidden {
+			position: absolute;
+			width: 0;
+			height: 0;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+			border: 0;
+			outline: 0
+		}
+
+		.custom-video {
+			position: relative;
+			display: grid;
+			grid-template-rows: 1fr auto;
+			width: -moz-fit-content;
+			width: fit-content;
+			font-size: 14px;
+			line-height: 1;
+			color: var(--color);
+			background-color: #000
+		}
+
+		.custom-video::before {
+			content: "(❁´◡`❁)";
+			position: absolute;
+			display: block;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			font-size: 40px;
+			color: #fff;
+			text-shadow: 0 0 4px red
+		}
+
+		.custom-video__start {
+			position: absolute;
+			z-index: 1;
+			height: 100%;
+			padding: 0;
+			color: var(--color-1);
+			background-color: transparent;
+			border: 0;
+			cursor: pointer;
+			transition: color .25s ease-in-out;
+			-webkit-appearance: none;
+			appearance: none;
+			inset: 0
+		}
+
+		.custom-video--started .custom-video__start {
+			display: none
+		}
+
+		.custom-video__start:hover {
+			color: var(--color-hover-1)
+		}
+
+		.custom-video__button::after,
+		.custom-video__button::before,
+		.custom-video__start::before {
+			content: "";
+			position: absolute;
+			background-color: currentColor;
+			inset: 0;
+			-webkit-mask-repeat: no-repeat;
+			mask-repeat: no-repeat;
+			-webkit-mask-position: center;
+			mask-position: center
+		}
+
+		.custom-video__start::before {
+			-webkit-mask-image: url(img/volume-mute.svg);
+			mask-image: url(img/volume-mute.svg);
+			-webkit-mask-size: 200px auto;
+			mask-size: 200px auto
+		}
+
+		.custom-video__controls {
+			position: relative;
+			display: flex;
+			align-items: center;
+			padding-top: 8px;
+			background-color: var(--bg-custom);
+			border: 1px solid var(--color);
+			gap: 6px
+		}
+
+		.custom-video--fullscreen .custom-video__controls {
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			left: 0
+		}
+
+		.custom-video__elements {
+			display: block;
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+			object-position: center
+		}
+
+		.custom-video--fullscreen .custom-video__elements {
+			height: calc(100% - 40px)
+		}
+
+		.custom-video__button {
+			position: relative;
+			display: block;
+			width: 30px;
+			min-width: 30px;
+			height: 30px;
+			padding: 0;
+			color: var(--color);
+			background-color: transparent;
+			border: 0;
+			cursor: pointer;
+			transition: color .25s ease-in-out;
+			-webkit-appearance: none;
+			appearance: none
+		}
+
+		.custom-video__button:hover {
+			color: var(--color-hover)
+		}
+
+		.custom-video__button::after,
+		.custom-video__button::before {
+			transition: opacity .25s ease-in-out;
+			-webkit-mask-size: 20px 20px;
+			mask-size: 20px 20px
+		}
+
+		.custom-video__button::after {
+			opacity: 0
+		}
+
+		.custom-video__play-pause::before {
+			-webkit-mask-image: url(img/play.svg);
+			mask-image: url(img/play.svg)
+		}
+
+		.custom-video__play-pause::after {
+			-webkit-mask-image: url(img/pause.svg);
+			mask-image: url(img/pause.svg)
+		}
+
+		.custom-video__play-pause--played::before {
+			opacity: 0
+		}
+
+		.custom-video__play-pause--played::after {
+			opacity: 1
+		}
+
+		.custom-video__sound-button::before {
+			-webkit-mask-image: url(img/volume-up.svg);
+			mask-image: url(img/volume-up.svg)
+		}
+
+		.custom-video__sound-button--down::before {
+			-webkit-mask-image: url(img/volume-down.svg);
+			mask-image: url(img/volume-down.svg)
+		}
+
+		.custom-video__sound-button--muted {
+			color: var(--color-1)
+		}
+
+		.custom-video__sound-button--muted:hover {
+			color: var(--color-hover-1)
+		}
+
+		.custom-video__sound-button--muted::before {
+			-webkit-mask-image: url(img/volume-mute.svg);
+			mask-image: url(img/volume-mute.svg)
+		}
+
+		.custom-video__fullscreen::before {
+			-webkit-mask-image: url(img/arrows-angle-expand.svg);
+			mask-image: url(img/arrows-angle-expand.svg)
+		}
+
+		.custom-video--fullscreen .custom-video__fullscreen::before {
+			-webkit-mask-image: url(img/arrows-angle-contract.svg);
+			mask-image: url(img/arrows-angle-contract.svg)
+		}
+
+		.custom-video__range {
+			height: 8px;
+			margin: 0;
+			overflow: hidden;
+			background-color: var(--bg-range);
+			border-radius: 2px;
+			cursor: pointer;
+			transition: opacity .25s ease-in-out;
+			-webkit-appearance: none;
+			appearance: none
+		}
+
+		.custom-video__range::-webkit-slider-thumb {
+			width: 8px;
+			height: 8px;
+			background-color: var(--color);
+			box-shadow: -100vw 0 0 100vw var(--color-range);
+			-webkit-appearance: none;
+			appearance: none
+		}
+
+		.custom-video__range::-moz-range-thumb {
+			width: 8px;
+			height: 8px;
+			background-color: var(--color);
+			border: 0;
+			border-radius: 0;
+			box-shadow: -100vw 0 0 100vw var(--color-range);
+			appearance: none
+		}
+
+		.custom-video__range:hover {
+			opacity: .7
+		}
+
+		.custom-video__range:focus-visible {
+			outline: 0
+		}
+
+		.custom-video__range:focus-visible::-webkit-slider-thumb {
+			background-color: var(--color-hover-1)
+		}
+
+		.custom-video__range:focus-visible::-moz-range-thumb {
+			background-color: var(--color-hover-1)
+		}
+
+		.custom-video__range-elements {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			border-radius: 0
+		}
+
+		.custom-video__range-times,
+		.custom-video__sound {
+			display: flex;
+			align-items: center;
+			margin: 0;
+			gap: 4px
+		}
+
+		.custom-video__sound {
+			position: relative;
+			margin: 0 0 0 auto
+		}
+
+		.custom-video__sound-range {
+			width: 100%;
+			max-width: 100px
+		}
+
+		.custom-video__list-cc,
+		.custom-video__list-settings {
+			margin: 0;
+			padding: 0;
+			list-style-type: none
+		}
+
+		.custom-video__list-cc li {
+			display: grid
+		}
+
+		.custom-video__settings::before {
+			-webkit-mask-image: url(img/three-dots-vertical.svg);
+			mask-image: url(img/three-dots-vertical.svg)
+		}
+
+		.custom-video__list-settings {
+			position: absolute;
+			right: 0;
+			bottom: 38px;
+			display: grid;
+			min-width: 250px;
+			text-align: center;
+			background-color: var(--bg-custom)
+		}
+
+		.custom-video__settings:not(.custom-video__settings--opened) + .custom-video__list-settings {
+			display: none
+		}
+
+		.custom-video__item-settings {
+			display: grid;
+			border: 1px solid var(--color)
+		}
+
+		.custom-video__item-settings:not(:last-child) {
+			border-bottom: 0
+		}
+
+		.custom-video__button-settings {
+			display: block;
+			padding: 7px 27px;
+			font-size: inherit;
+			line-height: inherit;
+			font-family: inherit;
+			text-align: center;
+			color: var(--color);
+			text-decoration: none;
+			background-color: transparent;
+			border: 0;
+			border-radius: 0;
+			cursor: pointer;
+			transition: background-color .25s ease-in-out, color .25s ease-in-out;
+			-webkit-appearance: none;
+			appearance: none
+		}
+
+		.custom-video__button-settings:hover {
+			color: var(--color-hover);
+			background-color: #fff
+		}
+
+		.custom-video__item-settings--speed {
+			padding: 1px
+		}
+
+		.custom-video__speed-label {
+			display: block;
+			padding: 7px
+		}
+
+		.custom-video__button-cc,
+		.custom-video__download {
+			position: relative
+		}
+
+		.custom-video__download::before {
+			right: 7px;
+			-webkit-mask-image: url(img/cloud-download.svg);
+			mask-image: url(img/cloud-download.svg)
+		}
+
+		.custom-video__button-cc::after,
+		.custom-video__button-cc::before,
+		.custom-video__download::before {
+			content: "";
+			position: absolute;
+			top: 50%;
+			display: block;
+			width: 16px;
+			height: 16px;
+			background-color: currentColor;
+			transform: translateY(-50%);
+			-webkit-mask-repeat: no-repeat;
+			mask-repeat: no-repeat;
+			-webkit-mask-position: center;
+			mask-position: center;
+			-webkit-mask-size: contain;
+			mask-size: contain
+		}
+
+		.custom-video__button-cc::before {
+			left: 7px;
+			opacity: 0;
+			-webkit-mask-image: url(img/check-sm.svg);
+			mask-image: url(img/check-sm.svg)
+		}
+
+		.custom-video__button-cc::after {
+			right: 7px;
+			-webkit-mask-image: url(img/badge-cc.svg);
+			mask-image: url(img/badge-cc.svg)
+		}
+
+		.custom-video__button-cc--current::before {
+			opacity: 1
+		}
+
+		.custom-video__button-cc--hidden {
+			color: var(--color-1)
+		}
+
+		.custom-video__button-cc--hidden:hover {
+			color: var(--color-hover-1)
+		}
+
+		.hidden {
+			display: none
+		}</style></head><body><div class="custom-video"><video class="custom-video__elements" poster="./img/two_families_mafia-x-men_el.jpg" preload="metadata" playsinline controls muted><track kind="subtitles" src="./video/two_families_mafia-x-men_el-ru.vtt" srclang="ru" default label="Русский"><track kind="subtitles" src="./video/two_families_mafia-x-men_el-en.vtt" srclang="en" label="English"><source src="./video/two_families_mafia-x-men_el.mp4"></video><button type="button" class="custom-video__start hidden"><span class="visually-hidden">play</span></button><div class="custom-video__controls"><label class="visually-hidden" for="range-times">current times</label> <input id="range-times" class="custom-video__range custom-video__range-elements" type="range" name="range-times" min="0" value="0"> <button type="button" class="custom-video__button custom-video__play-pause"><span class="visually-hidden">play/pause</span></button><p class="custom-video__range-times"><span class="custom-video__range-after"></span> / <span class="custom-video__range-before"></span></p><p class="custom-video__sound"><button type="button" class="custom-video__button custom-video__sound-button"><span class="visually-hidden">muted/unmuted</span></button> <label for="sound-range" class="visually-hidden">volume level</label> <input type="range" name="sound-range" id="sound-range" class="custom-video__range custom-video__sound-range" min="0" max="1" step="0.01" value="1"></p><button type="button" class="custom-video__button custom-video__fullscreen"><span class="visually-hidden">fullscreen</span></button> <button type="button" class="custom-video__button custom-video__settings"><span class="visually-hidden">settings</span></button><ul class="custom-video__list-settings"><li class="custom-video__item-settings custom-video__item-settings--speed"><label for="speed-range" class="custom-video__speed-label">Скорость: <span>1</span></label> <input type="range" name="speed-range" id="speed-range" class="custom-video__range custom-video__speed-range" min="0.1" max="3" step="0.1" value="1"></li><li class="custom-video__item-settings"><a href="./video/two_families_mafia-x-men_el.mp4" download class="custom-video__button-settings custom-video__download">Скачать</a></li><li class="custom-video__item-settings"><button type="button" class="custom-video__button-settings custom-video__button-cc">Субтитры</button></li></ul></div></div><script>const customVideo = document.querySelector('.custom-video');
+		const video = customVideo.querySelector('.custom-video__elements');
+		const buttonStart = customVideo.querySelector('.custom-video__start');
+		const buttonPlayPause = customVideo.querySelector('.custom-video__play-pause');
+		const rangeTime = customVideo.querySelector('.custom-video__range-elements');
+		const timeBefore = customVideo.querySelector('.custom-video__range-before');
+		const timeAfter = customVideo.querySelector('.custom-video__range-after');
+		const fullscreen = customVideo.querySelector('.custom-video__fullscreen');
+		const buttonSound = customVideo.querySelector('.custom-video__sound-button');
+		const rangeSound = customVideo.querySelector('.custom-video__sound-range');
+		const soundDownload = customVideo.querySelector('.custom-video__download');
+		const buttonCC = customVideo.querySelector('.custom-video__button-cc');
+		const labelSpeed = customVideo.querySelector('.custom-video__speed-label span');
+		const rangeSpeed = customVideo.querySelector('.custom-video__speed-range');
+		const buttonSettings = customVideo.querySelector('.custom-video__settings');
+
+		// video.controls = false;
+
+		if (video.muted) {
+			buttonSound.classList.add('custom-video__sound-button--muted');
+		}
+
+		const setDuration = () => {
+			rangeTime.setAttribute("max", video.duration);
+			timeAfter.innerText = secondsToTime(0);
+			timeBefore.innerText = secondsToTime(video.duration);
+		}
+
+		const handleLoadedMetaData = () => {
+			setDuration();
+		}
+		video.addEventListener("loadedmetadata", handleLoadedMetaData);
+
+		// start
+		const handleButtonStart = () => {
+			buttonStart.removeEventListener('click', handleButtonStart);
+			buttonStart.classList.add('hidden');
+			toggleMuted();
+		}
+
+		const toggleButtonPlayPause = () => {
+			buttonPlayPause.classList.toggle('custom-video__play-pause--played');
+		}
+
+		if (video.muted && video.autoplay && buttonStart) {
+			buttonStart.classList.remove('hidden');
+			buttonStart.addEventListener('click', handleButtonStart);
+			toggleButtonPlayPause();
+			buttonSound.classList.add('custom-video__sound-button--muted');
+		}
+
+		const handleButtonPlayPause = () => {
+			if (video.paused || video.ended) {
+				if (video.duration - video.currentTime <= 10) {
+					video.currentTime = 0;
+				}
+				video.play();
+				toggleButtonPlayPause();
+			} else {
+				video.pause();
+				buttonPlayPause.classList.remove('custom-video__play-pause--played');
+			}
+		}
+		buttonPlayPause.addEventListener('click', handleButtonPlayPause);
+
+		// time
+		const secondsToTime = (SECONDS) => {
+			return new Date(SECONDS * 1000).toISOString().slice(11, 19);
+		}
+
+		const handleTimeUpdate = () => {
+			if (!rangeTime.getAttribute("max")) {
+				setDuration();
+			}
+
+			rangeTime.value = video.currentTime;
+			timeAfter.innerText = secondsToTime(video.currentTime);
+		}
+		video.addEventListener("timeupdate", handleTimeUpdate);
+
+		const handleEnded = () => {
+			buttonPlayPause.classList.remove('custom-video__play-pause--played');
+		}
+		video.addEventListener('ended', handleEnded);
+
+		const handleRangeTime = () => {
+			video.currentTime = +rangeTime.value;
+		}
+		rangeTime.addEventListener('input', handleRangeTime);
+
+		// sound
+		const toggleMuted = () => {
+			buttonSound.classList.toggle('custom-video__sound-button--muted');
+			video.muted = !video.muted;
+		}
+
+		const handleButtonSound = () => {
+			if (video.volume === 0) {
+				return;
+			}
+
+			toggleMuted();
+		}
+		buttonSound.addEventListener('click', handleButtonSound);
+
+		const handleRangeSound = () => {
+			video.volume = rangeSound.value;
+			buttonSound.classList.toggle('custom-video__sound-button--down', +rangeSound.value <= 0.5);
+			buttonSound.classList.toggle('custom-video__sound-button--muted', +rangeSound.value === 0);
+			video.muted = !video.volume;
+		}
+		rangeSound.addEventListener('input', handleRangeSound);
+
+		// fullscreen
+		const toggleFullscreenClass = () => {
+			customVideo.classList.toggle('custom-video--fullscreen');
+		}
+
+		const handleFullscreenchange = () => {
+			if (document.fullscreenElement === null) {
+				toggleFullscreenClass();
+				customVideo.removeEventListener('fullscreenchange', handleFullscreenchange);
+			}
+		}
+
+		const handleFullscreen = () => {
+			if (document.fullscreenElement === null) {
+				customVideo.addEventListener('fullscreenchange', handleFullscreenchange);
+				customVideo.requestFullscreen();
+			} else {
+				customVideo.removeEventListener('fullscreenchange', handleFullscreenchange);
+				document.exitFullscreen();
+			}
+			toggleFullscreenClass();
+		};
+		fullscreen.addEventListener('click', handleFullscreen);
+
+		// speed
+		const handleRangeSpeed = () => {
+			video.playbackRate = +rangeSpeed.value;
+			labelSpeed.innerText = +rangeSpeed.value;
+		}
+		rangeSpeed.addEventListener('input', handleRangeSpeed);
+
+		const checkSettingsClick = (evt) => {
+			if (!evt.target.closest('.custom-video__settings') && !evt.target.closest('.custom-video__list-settings')) {
+				closeSetting();
+			}
+		}
+
+		const openSetting = () => {
+			buttonSettings.classList.add('custom-video__settings--opened');
+			document.addEventListener('click', checkSettingsClick);
+		}
+
+		const closeSetting = () => {
+			buttonSettings.classList.remove('custom-video__settings--opened');
+			document.removeEventListener('click', checkSettingsClick);
+		}
+
+		const handleButtonSettings = () => {
+			if (buttonSettings.classList.contains('custom-video__settings--opened')) {
+				return closeSetting();
+			}
+
+			openSetting();
+		}
+
+		buttonSettings.addEventListener('click', handleButtonSettings);
+
+		// track
+		// subtitles
+
+		const toggleButtonCCClassHidden = () => {
+			buttonCC.classList.toggle('hidden');
+		}
+
+		if (video.textTracks.length === 0) {
+			toggleButtonCCClassHidden();
+		} else {
+			for (var i = 0; i < video.textTracks.length; i++) {
+				video.textTracks[i].mode = "hidden";
+			}
+		}
+
+		const handleButtonCC = () => {
+			if (video.textTracks[0].mode === 'hidden') {
+				video.textTracks[0].mode = 'showing';
+				buttonCC.classList.toggle('custom-video__button-cc--current');
+			} else {
+				buttonCC.classList.toggle('custom-video__button-cc--current');
+				video.textTracks[0].mode = 'hidden';
+			}
+		}
+
+		if (video.textTracks.length === 1) {
+			buttonCC.addEventListener('click', handleButtonCC);
+		}
+
+		const toggleButtonCCClassCurrent = (AllButtonListCC, current) => {
+			AllButtonListCC.forEach(button => {
+				button.classList.toggle('custom-video__button-cc--current', +button.dataset.track === +current);
+			});
+		}
+
+		const createButtonCC = (label, dataTrack) => {
+			const button = document.createElement('button');
+			button.type = 'button';
+			button.innerText = label;
+			button.classList.add('custom-video__button-settings');
+			button.classList.add('custom-video__button-cc');
+			button.dataset.track = dataTrack;
+
+			return button;
+		}
+
+		if (video.textTracks.length > 1) {
+			toggleButtonCCClassHidden();
+
+			const AllButtonListCC = [];
+			const listCC = document.createElement('ul');
+			listCC.classList.add('custom-video__list-cc');
+
+			const li = document.createElement('li');
+
+			const buttonHiddenCC = createButtonCC('Отключить', -1);
+
+			AllButtonListCC.push(buttonHiddenCC);
+			toggleButtonCCClassCurrent(AllButtonListCC, -1);
+
+			li.append(buttonHiddenCC);
+			listCC.append(li);
+
+			for (let i = 0; i < video.textTracks.length; i++) {
+				const element = video.textTracks[i];
+
+				const li = document.createElement('li');
+
+				const button = createButtonCC(element.label, i);
+
+				AllButtonListCC.push(button);
+
+				li.append(button);
+				listCC.append(li);
+			}
+
+			buttonCC.after(listCC);
+
+			listCC.addEventListener('click', (evt) => {
+				if (!evt.target.dataset.track) {
+					return;
+				}
+
+				const datasetTrack = evt.target.dataset.track;
+
+				for (var i = 0; i < video.textTracks.length; i++) {
+					video.textTracks[i].mode = "hidden";
+				}
+
+				toggleButtonCCClassCurrent(AllButtonListCC, datasetTrack);
+				if (datasetTrack !== '-1') {
+					video.textTracks[datasetTrack].mode = 'showing';
+				}
+			});
+		}</script></body></html>
