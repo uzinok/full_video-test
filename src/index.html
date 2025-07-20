@@ -4,11 +4,63 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
+	<link rel="stylesheet" href="./styles/main.min.css">
 </head>
 <body>
-	сборка работает
-	<svg>
-		<use href="img/sprite.svg#icon-geo"></use>
-	</svg>
+	<div class="custom-video">
+		<video class="custom-video__elements" poster="./img/two_families_mafia-x-men_el.jpg" preload="metadata" playsinline controls muted>
+			<track kind="subtitles" src="./vtt/two_families_mafia-x-men_el-ru.vtt" srclang="ru" default label="Русский">
+			<track kind="subtitles" src="./vtt/two_families_mafia-x-men_el-en.vtt" srclang="en" label="English">
+			<source src="./video/two_families_mafia-x-men_el.mp4">
+		</video>
+
+		<button type="button" class="custom-video__start hidden">
+			<span class="visually-hidden">play</span>
+		</button>
+
+		<div class="custom-video__controls">
+			<label class="visually-hidden" for="range-times">current times</label>
+			<input id="range-times" class="custom-video__range custom-video__range-elements" type="range" name="range-times" min="0" value="0">
+
+			<button type="button" class="custom-video__button custom-video__play-pause">
+				<span class="visually-hidden">play/pause</span>
+			</button>
+
+			<p class="custom-video__range-times">
+				<span class="custom-video__range-after"></span> / <span class="custom-video__range-before"></span>
+			</p>
+
+			<p class="custom-video__sound">
+				<button type="button" class="custom-video__button custom-video__sound-button">
+					<span class="visually-hidden">muted/unmuted</span>
+				</button>
+				<label for="sound-range" class="visually-hidden">volume level</label>
+				<input type="range" name="sound-range" id="sound-range" class="custom-video__range custom-video__sound-range" min="0" max="1" step="0.01" value="1">
+			</p>
+
+			<button type="button" class="custom-video__button custom-video__fullscreen">
+				<span class="visually-hidden">fullscreen</span>
+			</button>
+
+			<button type="button" class="custom-video__button custom-video__settings">
+				<span class="visually-hidden">settings</span>
+			</button>
+
+			<ul class="custom-video__list-settings">
+				<li class="custom-video__item-settings custom-video__item-settings--speed">
+					<label for="speed-range" class="custom-video__speed-label">Скорость: <span>1</span></label>
+					<input type="range" name="speed-range" id="speed-range" class="custom-video__range custom-video__speed-range" min="0.1" max="3" step="0.1" value="1">
+				</li>
+				<li class="custom-video__item-settings">
+					<a href="./video/two_families_mafia-x-men_el.mp4" download class="custom-video__button-settings custom-video__download">Скачать</a>
+				</li>
+				<li class="custom-video__item-settings">
+					<button type="button" class="custom-video__button-settings custom-video__button-cc">Субтитры</button>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<script src="./scripts/main.js"></script>
 </body>
 </html>
