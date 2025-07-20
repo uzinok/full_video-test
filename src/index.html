@@ -586,22 +586,51 @@
 			customVideo.classList.toggle('custom-video--fullscreen');
 		}
 
-		const handleFullscreenchange = () => {
-			if (document.fullscreenElement === null) {
-				toggleFullscreenClass();
-				customVideo.removeEventListener('fullscreenchange', handleFullscreenchange);
-			}
-		}
-
 		const handleFullscreen = () => {
-			if (document.fullscreenElement === null) {
+			if (document.fullscreenElement === null ||
+				document.webkitFullscreenElement === null ||
+				document.mozFullScreenElement === null ||
+				document.msFullscreenElement === null) {
+
+				if (customVideo.requestFullscreen) {
+					customVideo.requestFullscreen();
+				} else if (customVideo.webkitRequestFullscreen) {
+					customVideo.webkitRequestFullscreen();
+				} else if (customVideo.mozRequestFullScreen) {
+					customVideo.mozRequestFullScreen();
+				} else if (customVideo.msRequestFullscreen) {
+					customVideo.msRequestFullscreen();
+				}
+
 				customVideo.addEventListener('fullscreenchange', handleFullscreenchange);
-				customVideo.requestFullscreen();
+				customVideo.addEventListener('webkitfullscreenchange', handleFullscreenchange);
+				customVideo.addEventListener('mozfullscreenchange', handleFullscreenchange);
+				customVideo.addEventListener('MSFullscreenChange', handleFullscreenchange);
 			} else {
-				customVideo.removeEventListener('fullscreenchange', handleFullscreenchange);
-				document.exitFullscreen();
+				if (document.exitFullscreen) {
+					document.exitFullscreen();
+				} else if (document.webkitExitFullscreen) {
+					document.webkitExitFullscreen();
+				} else if (document.mozCancelFullScreen) {
+					document.mozCancelFullScreen();
+				} else if (document.msExitFullscreen) {
+					document.msExitFullscreen();
+				}
 			}
 			toggleFullscreenClass();
+		};
+
+		const handleFullscreenchange = () => {
+			if (document.fullscreenElement === null &&
+				document.webkitFullscreenElement === null &&
+				document.mozFullScreenElement === null &&
+				document.msFullscreenElement === null) {
+				toggleFullscreenClass();
+				customVideo.removeEventListener('fullscreenchange', handleFullscreenchange);
+				customVideo.removeEventListener('webkitfullscreenchange', handleFullscreenchange);
+				customVideo.removeEventListener('mozfullscreenchange', handleFullscreenchange);
+				customVideo.removeEventListener('MSFullscreenChange', handleFullscreenchange);
+			}
 		};
 		fullscreen.addEventListener('click', handleFullscreen);
 
